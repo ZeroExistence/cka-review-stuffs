@@ -27,15 +27,15 @@ apt-get update && apt-get upgrade -y
 ```
 bash master-node-setup.sh
 ```
-### Do this for failed setup.
-2. To clean-up failed installation, use the command below.
-```
-kubeadm reset
-```
-3. Re-run master-node-setup.sh after clean-up.
-```
-bash master-node-setup.sh
-```
+   ### Do this for failed setup.
+   2. To clean-up failed installation, use the command below.
+   ```
+   kubeadm reset
+   ```
+   3. Re-run master-node-setup.sh after clean-up.
+   ```
+   bash master-node-setup.sh
+   ```
 
 ## Worker node installation.
 1. Run worker-setup.sh
