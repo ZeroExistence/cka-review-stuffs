@@ -6,7 +6,7 @@ This folder discusses matters related to services within kubernetes.
    * ClusterIP Service
      1. Create echo-cluster-service deployment.
      ```
-     kubectl create deployment echo-cluster-service --image=k8s.gcr.io/  echoserver:1.10 --port=8080 --replicas=2
+     kubectl create deployment echo-cluster-service --image=k8s.gcr.io/echoserver:1.10 --port=8080 --replicas=2
      ```
      2. Expose echo-cluster-service using cluster ip.
      ```
@@ -18,7 +18,7 @@ This folder discusses matters related to services within kubernetes.
      ```
      4. Create curl-service-demo pod.
      ```
-     kubectl run curl-service-demo --image=curlimages/curl --command -- /  bin/sh -c "sleep infinity"
+     kubectl run curl-service-demo --image=curlimages/curl --command -- /bin/sh -c "sleep infinity"
      ```
      5. Curl the echo-cluster-service multiple times.
      ```
@@ -40,8 +40,8 @@ This folder discusses matters related to services within kubernetes.
 2. Service DNS Service
    1. Curl the services that you created using the service DNS names.
    ```
-   kubectl exec curl-service-demo -- curl echo-cluster-  service.default.svc.cluster.local:8080
-   kubectl exec curl-service-demo -- curl echo-nodeport-  service.default.svc.cluster.local:8443
+   kubectl exec curl-service-demo -- curl echo-cluster-service.default.svc.cluster.local:8080
+   kubectl exec curl-service-demo -- curl echo-nodeport-service.default.svc.cluster.local:8443
    ```
 3. Ingress
    1. Install ingress-nginx ingress controller.
