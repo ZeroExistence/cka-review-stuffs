@@ -58,21 +58,14 @@ sudo apt-get update
 sudo apt-get install -y kubelet=$K8SVERSION kubeadm=$K8SVERSION kubectl=$K8SVERSION
 sudo apt-mark hold kubelet kubeadm kubectl
 
-cat <<EOF | sudo tee ~/kubeadm.yaml
-apiVersion: kubeadm.k8s.io/v1beta2
-kind: ClusterConfiguration
-kubernetesVersion: v1.20.2
-apiServer:
-  extraArgs:
-    advertise-address: 192.168.155.253
----
+cat <<EOF | sudo tee /tmp/kubeadm.yaml
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
 cgroupDriver: "systemd"
 podCIDR: "10.10.0.0/16"
 EOF
 
-kubeadm init --config=kubeadm.yaml
+kubeadm init --config=/tmp/kubeadm.yaml
 
 mkdir -p $HOME/.kube
 sudo cp -fi /etc/kubernetes/admin.conf $HOME/.kube/config

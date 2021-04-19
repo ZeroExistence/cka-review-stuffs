@@ -44,5 +44,6 @@ bash worker-setup.sh
 ```
 2. Join the master node cluster using the kubeadm join command.
 ```
-kubeadm join ~~~
+kubeadm join [MASTER_NODE]:6443 --token l7lhb4.dqu2yvltiv6sgfa0 \
+>     --discovery-token-ca-cert-hash sha256:143e0e6d3e0266a1951eaffac0c86c14e527d985ed1cfa4d2e2420701b7d8546
 ```
