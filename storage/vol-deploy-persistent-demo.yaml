@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: vol-nfs-persistent-pv-demo
+  name: vol-nfs-persistent-pv-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: vol-nfs-persistent-pv-demo
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: vol-nfs-persistent-pv-demo
+    spec:
+      containers:
+      - image: alpine
+        name: alpine-writer
+        command:
+        - /bin/sh
+        - -c
+        args:
+        - "while true; do date >> /output/data; sleep 5s; done"
+        resources: {}
+        volumeMounts:
+        - name: share2-persistent-vol
+          mountPath: /output
+      - image: alpine
+        name: alpine-reader
+        command:
+        - sleep
+        - infinity
+        volumeMounts:
+        - name: share2-persistent-vol
+          mountPath: /input
+      volumes:
+      - name: share2-persistent-vol
+        persistentVolumeClaim:
+          claimName: share2
+status: {}

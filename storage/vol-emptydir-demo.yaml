@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: vol-emptydir-demo
+  name: vol-emptydir-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vol-emptydir-demo
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: vol-emptydir-demo
+    spec:
+      containers:
+      - image: alpine
+        name: alpine-writer
+        command:
+        - /bin/sh
+        - -c
+        args:
+        - "while true; do date >> /output/data; sleep 5s; done"
+        resources: {}
+        volumeMounts:
+        - name: emptydir-vol
+          mountPath: /output
+      - image: alpine
+        name: alpine-reader
+        command:
+        - sleep
+        - infinity
+        volumeMounts:
+        - name: emptydir-vol
+          mountPath: /input
+      volumes:
+      - name: emptydir-vol
+        emptyDir: {}
+status: {}

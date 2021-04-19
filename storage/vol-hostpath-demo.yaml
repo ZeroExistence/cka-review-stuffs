@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: vol-hostpath-demo
+  name: vol-hostpath-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vol-hostpath-demo
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: vol-hostpath-demo
+    spec:
+      containers:
+      - image: alpine
+        name: vol-hostpath-demo
+        resources: {}
+        command:
+        - /bin/sh
+        - -c
+        args:
+        - "while true; do date >> /app/data; sleep 5s; done"
+        volumeMounts:
+        - name: hostpath-vol
+          mountPath: /app
+      volumes:
+      - name: hostpath-vol
+        hostPath:
+          path: /tmp/hostpath-vol
+status: {}
