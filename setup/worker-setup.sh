@@ -1,3 +1,11 @@
+### SET ENVIRONMENT VARIABLES HERE
+export VERSION=1.20
+export K8SVERSION=1.20.2-00
+export OS=xUbuntu_20.04
+###
+
+apt-get update && apt-get upgrade -y
+
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 br_netfilter
 EOF
@@ -26,9 +34,6 @@ EOF
 
 sudo sysctl --system
 
-export VERSION=1.20
-export K8SVERSION=1.20.2-00
-export OS=xUbuntu_20.04
 cat <<EOF | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
 deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/ /
 EOF

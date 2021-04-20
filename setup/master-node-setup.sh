@@ -1,3 +1,12 @@
+### SET ENVIRONMENT VARIABLES HERE
+export VERSION=1.20
+export K8SVERSION=1.20.2-00
+export OS=xUbuntu_20.04
+export MASTER_NODE_IP=192.168.146.5
+###
+
+apt-get update && apt-get upgrade -y
+
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 br_netfilter
 EOF
@@ -26,9 +35,6 @@ EOF
 
 sudo sysctl --system
 
-export VERSION=1.20
-export K8SVERSION=1.20.2-00
-export OS=xUbuntu_20.04
 cat <<EOF | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
 deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/ /
 EOF
@@ -59,10 +65,51 @@ sudo apt-get install -y kubelet=$K8SVERSION kubeadm=$K8SVERSION kubectl=$K8SVERS
 sudo apt-mark hold kubelet kubeadm kubectl
 
 cat <<EOF | sudo tee /tmp/kubeadm.yaml
+apiVersion: kubeadm.k8s.io/v1beta2
+bootstrapTokens:
+- groups:
+  - system:bootstrappers:kubeadm:default-node-token
+  token: abcdef.0123456789abcdef
+  ttl: 24h0m0s
+  usages:
+  - signing
+  - authentication
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: ${MASTER_NODE_IP}
+  bindPort: 6443
+nodeRegistration:
+  criSocket: /var/run/crio/crio.sock
+  name: $(hostname)
+  taints:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/master
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+certificatesDir: /etc/kubernetes/pki
+clusterName: kubernetes
+controllerManager: {}
+dns:
+  type: CoreDNS
+etcd:
+  local:
+    dataDir: /var/lib/etcd
+imageRepository: k8s.gcr.io
+kind: ClusterConfiguration
+kubernetesVersion: v1.20.0
+networking:
+  dnsDomain: cluster.local
+  serviceSubnet: 10.96.0.0/12
+  podSubnet: 10.10.0.0/16
+scheduler: {}
+apiServer:
+  timeoutForControlPlane: 4m0s
+  extraArgs:
+    advertise-address: ${MASTER_NODE_IP}
+---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
 cgroupDriver: "systemd"
-podCIDR: "10.10.0.0/16"
 EOF
 
 kubeadm init --config=/tmp/kubeadm.yaml
