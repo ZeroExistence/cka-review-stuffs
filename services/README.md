@@ -72,3 +72,18 @@ This folder discusses matters related to services within kubernetes.
    ```
    curl http://NODE_IP_ADDRESS:INGRESS_HTTTP_PORT:/echo
    ```
+
+---
+
+## Additional YAML file for references
+#### ingress-wildcard-demo.yaml
+This ingress object defines a hostname with full path.
+```
+Default backend:  default-http-backend:80 (<error: endpoints "default-http-backend" not found>)
+Rules:
+  Host             Path  Backends
+  ----             ----  --------
+  demo.moe.ph
+                   /   echo-cluster-service:8080 (10.10.112.70:8080,10.10.112.71:8080,10.10.252.198:8080)
+Annotations:       nginx.ingress.kubernetes.io/rewrite-target: /
+```

@@ -86,4 +86,36 @@ This folder discusses matters related to networking.
       4. Delete the net-pol-for-namespace.yaml
       ```
       kubectl delete -f net-pol-for-namespace.yaml
-      ``` 
+      ```
+
+---
+
+## Additional YAML file for references
+#### net-pol-for-namespace-pod.yaml
+This policy uses both namespaceSelector and podSelector. Both the selector should be true to allow access.
+```
+Spec:
+  PodSelector:     app=echo-secure
+  Allowing ingress traffic:
+    To Port: 8080/TCP
+    From:
+      NamespaceSelector: project=client
+      PodSelector: app=curl-client-secure
+  Not affecting egress traffic
+  Policy Types: Ingress
+```
+
+#### net-pol-for-multiple-pods.yaml
+This policy uses multiple pod selectors for allowing multiple apps in single policy. Pod should either be app=curl-secure or app=curl-blocked.
+```
+Spec:
+  PodSelector:     app=echo-secure
+  Allowing ingress traffic:
+    To Port: 8080/TCP
+    From:
+      PodSelector: app=curl-secure
+    From:
+      PodSelector: app=curl-blocked
+  Not affecting egress traffic
+  Policy Types: Ingress
+```

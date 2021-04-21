@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: net-pol-for-namespace-pod
+  namespace: secure-network
+spec:
+  podSelector:
+    matchLabels:
+      app: echo-secure
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          project: client
+      podSelector:
+        matchLabels:
+          app: curl-client-secure
+    ports:
+    - protocol: TCP
+      port: 8080
