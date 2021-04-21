@@ -11,18 +11,23 @@ swapoff [SWAP PARTITION]
 ```
 hostnamectl set-hostname ubuntu-m01.moe.ph
 ```
-3. Set versions needed into master and worker scripts.
+3. Clone this git repository, and go to setup folder.
+```
+git clone https://github.com/ZeroExistence/cka-review-stuffs.git
+cd cka-review-stuffs/setup
+```
+4. Set versions needed into master and worker scripts.
 ```
 export VERSION=1.20
 export K8SVERSION=1.20.2-00
 export OS=xUbuntu_20.04
 ```
-4. Do full system update.
+5. Set your API endpoint in master-node-setup.sh. Use private IP to bind it to private network.
 ```
-apt-get update && apt-get upgrade -y
+export MASTER_NODE_IP=192.168.146.5
 ```
 
-## Master node installation. (Networkless setup)
+## Master node installation.
 1. Run master-node-setup.sh script.
 ```
 bash master-node-setup.sh
